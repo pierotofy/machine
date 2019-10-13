@@ -8,9 +8,7 @@ import (
 	"github.com/docker/machine/libmachine/drivers"
 	"github.com/docker/machine/libmachine/engine"
 	"github.com/docker/machine/libmachine/log"
-	"github.com/docker/machine/libmachine/mcnutils"
 	"github.com/docker/machine/libmachine/provision/pkgaction"
-	"github.com/docker/machine/libmachine/provision/serviceaction"
 	"github.com/docker/machine/libmachine/swarm"
 )
 
@@ -108,27 +106,27 @@ func (provisioner *UbuntuSystemdProvisioner) Provision(swarmOptions swarm.Option
 	}
 	provisioner.EngineOptions.StorageDriver = storageDriver
 
-	log.Debug("setting hostname")
-	if err := provisioner.SetHostname(provisioner.Driver.GetMachineName()); err != nil {
-		return err
-	}
+	// log.Debug("setting hostname")
+	// if err := provisioner.SetHostname(provisioner.Driver.GetMachineName()); err != nil {
+	// 	return err
+	// }
 
-	log.Debug("installing base packages")
-	for _, pkg := range provisioner.Packages {
-		if err := provisioner.Package(pkg, pkgaction.Install); err != nil {
-			return err
-		}
-	}
+	// log.Debug("installing base packages")
+	// for _, pkg := range provisioner.Packages {
+	// 	if err := provisioner.Package(pkg, pkgaction.Install); err != nil {
+	// 		return err
+	// 	}
+	// }
 
-	log.Info("Installing Docker...")
-	if err := installDockerGeneric(provisioner, engineOptions.InstallURL); err != nil {
-		return err
-	}
+	// log.Info("Installing Docker...")
+	// if err := installDockerGeneric(provisioner, engineOptions.InstallURL); err != nil {
+	// 	return err
+	// }
 
-	log.Debug("waiting for docker daemon")
-	if err := mcnutils.WaitFor(provisioner.dockerDaemonResponding); err != nil {
-		return err
-	}
+	// log.Debug("waiting for docker daemon")
+	// if err := mcnutils.WaitFor(provisioner.dockerDaemonResponding); err != nil {
+	// 	return err
+	// }
 
 	provisioner.AuthOptions = setRemoteAuthOptions(provisioner)
 
@@ -137,13 +135,13 @@ func (provisioner *UbuntuSystemdProvisioner) Provision(swarmOptions swarm.Option
 		return err
 	}
 
-	log.Debug("configuring swarm")
-	if err := configureSwarm(provisioner, swarmOptions, provisioner.AuthOptions); err != nil {
-		return err
-	}
+	// log.Debug("configuring swarm")
+	// if err := configureSwarm(provisioner, swarmOptions, provisioner.AuthOptions); err != nil {
+	// 	return err
+	// }
 
-	// enable in systemd
-	log.Debug("enabling docker in systemd")
-	err = provisioner.Service("docker", serviceaction.Enable)
+	// // enable in systemd
+	// log.Debug("enabling docker in systemd")
+	// err = provisioner.Service("docker", serviceaction.Enable)
 	return err
 }
